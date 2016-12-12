@@ -42,6 +42,6 @@ I'm one Java developer feeling very warm for Linux environments. Since I've star
 
 
 
-Sizes are not calculated ideally, i.e. I do not pay any attention to shared memory and similar aspects, but it's quite good for the job.
+Sizes are not calculated ideally, i.e. I do not pay any attention to shared memory and similar aspects, but it's still quite good for the job.
 
 
