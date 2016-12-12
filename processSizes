@@ -29,10 +29,10 @@ function parseParams {
     
 #    echo "k:[${key}], v:[${value}]"
     case ${key} in
-        limit|-l)
+        size|-s)
             sizelimit=${value};
             ;;
-        timeout|-t)
+        loop|-l)
             looptimeout=${value};
             ;;
          *)
