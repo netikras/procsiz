@@ -44,4 +44,4 @@ I'm one Java developer feeling very warm for Linux environments. Since I've star
 
 Sizes are not calculated ideally, i.e. I do not pay any attention to shared memory and similar aspects, but it's still quite good for the job.
 
-
+N.B. Script uses "column -t" to make this nice alignment and "-l" (or "loop") flag starts monitoring output with "watch" command. Keep that in mind when running on UNIX machines -- they tend to lack both: column and watch commands. Especially older ones.
