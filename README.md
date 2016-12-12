@@ -41,3 +41,7 @@ I'm one Java developer feeling very warm for Linux environments. Since I've star
     --->3GB---    17489  netikras  1482.25M   chrome
 
 
+
+Sizes are not calculated ideally, i.e. I do not pay any attention to shared memory and similar aspects, but it's quite good for the job.
+
+
