@@ -1,0 +1,105 @@
+#!/bin/bash
+
+
+
+
+sizelimit=100;
+looptimeout=0;
+
+## I very much prefer the C-style arguments' notation. It's just so much easier to work with...
+argc=${#};
+argv=();
+argpos=0;
+while [[ ${argpos} -le ${argc} ]] ; do
+    argv[${argpos}]=${@:${argpos}:1};
+#    echo "Added argv[${argpos}]=${argv[${argpos}]}"
+    argpos=$((${argpos}+1));
+done;
+
+
+
+function parseParams {
+    local key="${1}";
+    local value="${2}";
+
+    { [ -z "${key}" ] || [ -z "${value}" ] ; } && {
+        echo "E: incorrect key-value pair: k:[${key}], v:[${value}]";
+        return;
+    }
+    
+#    echo "k:[${key}], v:[${value}]"
+    case ${key} in
+        limit|-l)
+            sizelimit=${value};
+            ;;
+        timeout|-t)
+            looptimeout=${value};
+            ;;
+         *)
+             echo "E: Unknown key: [${key}]";
+     esac;
+}
+
+
+argpos=1;
+
+while [[ ${argpos} -le ${argc} ]] ; do
+    _k=${argv[${argpos}]};
+    argpos=$((${argpos}+1));
+    _v=${argv[${argpos}]};
+    argpos=$((${argpos}+1));
+    parseParams "${_k}" "${_v}";
+done;
+
+
+
+function gatherInfo {
+
+    local procsizelimit=${1:-100};
+
+    ps -eo pid,user,rss,comm \
+        | egrep -v "PID.*USER.*COMMAND" \
+        | sort -nrk3 \
+        | awk \
+          -v limit="${procsizelimit}"\
+        'BEGIN{
+            threshold_MB=limit; 
+            total=0; 
+            total_shown=0; 
+            last_G=0; 
+            shown_buffer="";
+        }{
+            total+=$3; 
+            if ($3 > (1024*threshold_MB)) { 
+                total_shown+=$3; 
+                $3 = $3/1024"M"; 
+                curr_G = int(total_shown/(1024^2)); 
+                if (curr_G > last_G) {
+                    last_G = curr_G;
+                };  
+                shown_buffer = shown_buffer"--->"last_G"GB--- " ; 
+                shown_buffer= shown_buffer""$0"\n"; 
+            } 
+        }END{
+            print "\n\nTotal_shown: - - "total_shown/1024"MB - \nTotal_grand: - - "total/1024"MB - \n";
+            print "---";
+            printf "Processes bigger than %d MB:\n\n", threshold_MB > "/dev/stderr";
+            printf "SUM(SIZE) PID USER SIZE COMMAND\n";
+            print shown_buffer;
+        }' \
+    | column -t
+}
+
+export -f gatherInfo;
+
+
+
+[[ ${looptimeout} -gt 0 ]] && {
+    watch -n ${looptimeout} gatherInfo "${sizelimit}" 2>&1;
+} || {
+    gatherInfo "${sizelimit}" 2>&1;
+}
+
+
+
+
