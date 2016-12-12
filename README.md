@@ -3,7 +3,7 @@ I'm one Java developer feeling very warm for Linux environments. Since I've star
 
 
 
-    ./processSizes -l 150
+    ./processSizes -s 150
     Processes bigger than 150 MB:
     
     Total_shown:  -      -         8891.72MB  -
@@ -28,7 +28,7 @@ I'm one Java developer feeling very warm for Linux environments. Since I've star
     --->8GB---    26092  netikras  159.652M   chrome
 
 
-    ./processSizes -l 1000 -t 4
+    ./processSizes -s 1000 -l 4
     Every 4,0s: gatherInfo 1000      Mon Dec 12 20:45:07 2016
     
     Processes bigger than 1000 MB:
